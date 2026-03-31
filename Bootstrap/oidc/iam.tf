@@ -54,6 +54,20 @@ resource "aws_iam_role_policy" "github_actions_policy" {
           "iam:TagRole"
         ]
         Resource = "*"
+      },
+      {
+        Effect = "Allow"
+        Action = [
+          "s3:*",
+          "s3:CreateBucket",
+          "s3:DeleteBucket",
+          "s3:ListBucket",
+          "s3:ListAllMyBuckets",
+          "s3:GetBucketLocation",
+          "s3:GetBucketTagging",
+          "s3:PutBucketTagging"
+        ]
+        Resource = "*"
       }
     ]
   })
