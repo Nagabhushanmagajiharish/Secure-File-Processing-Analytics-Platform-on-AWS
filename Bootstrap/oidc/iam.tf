@@ -1,6 +1,4 @@
-data "aws_caller_identity" "current" {}
-
-resource "aws_iam_role" "github_actions_role" {
+ resource "aws_iam_role" "github_actions_role" {
   name = "github-actions-oidc-role"
 
   assume_role_policy = jsonencode({
@@ -9,7 +7,7 @@ resource "aws_iam_role" "github_actions_role" {
       {
         Effect = "Allow"
         Principal = {
-          Federated = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:oidc-provider/token.actions.githubusercontent.com"
+          Federated = "arn:aws:iam::061039787667:oidc-provider/token.actions.githubusercontent.com"
         }
         Action = "sts:AssumeRoleWithWebIdentity"
         Condition = {
@@ -17,7 +15,13 @@ resource "aws_iam_role" "github_actions_role" {
             "token.actions.githubusercontent.com:aud" = "sts.amazonaws.com"
           }
           StringLike = {
-            "token.actions.githubusercontent.com:sub" = "repo:${var.github_username}/${var.github_repo_name}:ref:refs/heads/main"
+            "token.actions.githubusercontent.com:sub": [
+            "repo:Nagabhushanmagajiharish/Secure-File-Processing-Analytics-Platform-on-AWS:ref:refs/heads/main",
+            "repo:Nagabhushanmagajiharish/Secure-File-Processing-Analytics-Platform-on-AWS:pull_request",
+            "repo:Nagabhushanmagajiharish/Secure-File-Processing-Analytics-Platform-on-AWS:environment:production",
+            "repo:Nagabhushanmagajiharish/Secure-File-Processing-Analytics-Platform-on-AWS-Bootstrap:ref:refs/heads/main",
+            "repo:Nagabhushanmagajiharish/Secure-File-Processing-Analytics-Platform-on-AWS-Bootstrap:pull_request"
+          ]
           }
         }
       }
