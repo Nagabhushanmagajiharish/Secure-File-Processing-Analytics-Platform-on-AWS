@@ -3,7 +3,15 @@ name: Terraform CI
 on:
   push:
     branches: [ main ]
+    paths:
+      - 'Bootstrap/backend-bucket/**'
+      - 'Bootstrap/oidc/**'
+      - '.github/workflows/terraform.yml'
   pull_request:
+    paths:
+      - 'Bootstrap/backend-bucket/**'
+      - 'Bootstrap/oidc/**'
+      - '.github/workflows/terraform.yml' 
   
 permissions:
   id-token: write
