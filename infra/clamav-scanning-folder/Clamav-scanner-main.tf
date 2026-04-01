@@ -46,8 +46,8 @@ resource "aws_iam_role_policy" "scanner_lambda_policy" {
           "${aws_s3_bucket.quarantine-bucket.arn}/*",
           "${aws_s3_bucket.scan-results-bucket.arn}/*"
         ]
-      }
-       {
+      },
+      {
         Effect = "Allow"
         Action = [
           "sqs:ReceiveMessage",
@@ -79,4 +79,3 @@ resource "aws_lambda_function" "clamav_scanner" {
     }
   }
 }
-

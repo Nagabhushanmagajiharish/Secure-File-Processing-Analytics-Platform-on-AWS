@@ -4,12 +4,16 @@ on:
   pull_request:
     paths:
       - "infra/main-module/**"
+      - "infra/clamav-scanning-folder/**"
+      - "infra/Glue/**"
       - ".github/workflows/infra.yml"
   push:
     branches:
       - main
     paths:
       - "infra/main-module/**"
+      - "infra/clamav-scanning-folder/**"
+      - "infra/Glue/**"
       - ".github/workflows/infra.yml"
   workflow_dispatch:
     inputs:
@@ -43,7 +47,7 @@ jobs:
     defaults:
       run:
         shell: bash
-        working-directory: infra
+        working-directory: infra/main-module
 
     steps:
       - name: Checkout
@@ -75,7 +79,7 @@ jobs:
     defaults:
       run:
         shell: bash
-        working-directory: infra
+        working-directory: infra/main-module
 
     steps:
       - name: Checkout
@@ -99,13 +103,13 @@ jobs:
         run: terraform validate
 
       - name: Create ECR repository first
-        run: terraform apply -target=aws_ecr_repository.clamav -auto-approve
+        run: terraform apply -target=module.clamav_scanner.aws_ecr_repository.clamav -auto-approve
 
       - name: Login to Amazon ECR
         uses: aws-actions/amazon-ecr-login@v2
 
       - name: Build scanner image
-        run: docker build -t $ECR_REPOSITORY .
+        run: docker build -t $ECR_REPOSITORY ../clamav-scanning-folder
 
       - name: Tag scanner image
         run: docker tag $ECR_REPOSITORY:latest $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/$ECR_REPOSITORY:latest
@@ -137,7 +141,7 @@ jobs:
     defaults:
       run:
         shell: bash
-        working-directory: infra
+        working-directory: infra/main-module
 
     steps:
       - name: Checkout

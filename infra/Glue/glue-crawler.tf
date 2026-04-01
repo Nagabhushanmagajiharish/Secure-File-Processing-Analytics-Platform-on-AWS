@@ -29,8 +29,8 @@ resource "aws_iam_role_policy" "glue_crawler_policy" {
           "s3:ListBucket"
         ]
         Resource = [
-          aws_s3_bucket.scan-results-bucket.arn,
-          "${aws_s3_bucket.scan-results-bucket.arn}/*"
+          "arn:aws:s3:::${var.scan_results_bucket}",
+          "arn:aws:s3:::${var.scan_results_bucket}/*"
         ]
       },
       {
@@ -59,6 +59,6 @@ resource "aws_glue_crawler" "scan_results_crawler" {
   database_name = aws_glue_catalog_database.scan_results.name
 
   s3_target {
-    path = "s3://${aws_s3_bucket.scan-results-bucket.bucket}/scan-results/"
+    path = "s3://${var.scan_results_bucket}/scan-results/"
   }
 }
